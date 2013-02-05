@@ -197,9 +197,9 @@ processes (more on that later).
 
 * Standard as of python 2.6
 
-\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+<[pyconcode]
 >>> import multiprocessing
-\end{minted}
+[pyconcode]>
 
 * Like threads, but in separate processes
 * Avoids GIL but higher process creation cost
@@ -225,14 +225,14 @@ processes (more on that later).
 
 ==== Race: in action ====[containsverbatim]
 
-\begin{minted}{console}
+<[consolecode]
 $ python ex_smp_race.py
 10.0
 $ python ex_smp_race.py
 100.0
 $ python ex_smp_race.py
 10.0
-\end{minted}
+[consolecode]>
 
 ==== The apparent solution ====[containsverbatim]
 
@@ -293,7 +293,7 @@ See also: \href{http://en.wikipedia.org/wiki/Dining_philosophers_problem}{Dining
 * The @Pool@ class comes in handy for embarrassingly parallel problems
 * Provides a @map@ function across worker processes
 
-\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+<[pyconcode]
 >>> nums = range(10)
 >>> %timeit map(f, nums)
 1 loops, best of 3: 1.52 s per loop
@@ -306,7 +306,7 @@ See also: \href{http://en.wikipedia.org/wiki/Dining_philosophers_problem}{Dining
 >>> pool24 = Pool(24)
 >>> %timeit pool24.map(f, nums)
 10 loops, best of 3: 187 ms per loop
-\end{minted}
+[pyconcode]>
 
 * @import@ statements need to be in the function
 * If you need one with a progressbar: \href{https://github.com/esc/embparpbar}{embparpbar}
@@ -341,29 +341,29 @@ $ ipcluster start -n 24
 
 * Use the @Client@ class to interface with the engines
 
-\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+<[pyconcode]
 >>> from IPython.parallel import Client
 >>> client = Client()
 >>> len(client.ids)
 24
-\end{minted}
+[pyconcode]>
 
 * Easy example: using an embarrassingly parallel map
 * Obtain a @DirectView@ using slicing on the @client@
 
-\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+<[pyconcode]
 >>> dview = client[:]
 >>> type(dview)
 IPython.parallel.client.view.DirectView
 >>> %timeit dview.map_sync(f, range(10)) # using the f from before
 1 loops, best of 3: 187 ms per loop
-\end{minted}
+[pyconcode]>
 
 ==== IPython engines have local namespaces ====[containsverbatim]
 
 * @DirectView@ object provides dictionary access to engine namespaces
 
-\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+<[pyconcode]
 >>> dview.execute('x=1')
 >>> dview['x']
 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
@@ -371,11 +371,11 @@ IPython.parallel.client.view.DirectView
 >>> dview8.execute('x=23')
 >>> dview['x']
 [1, 1, 1, 1, 1, 1, 1, 1, 23, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-\end{minted}
+[pyconcode]>
 
 * Using @apply@ in asynchronous and synchronous mode
 
-\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+<[pyconcode]
 >>> result = dview.apply(lambda y: x+y, 19)
 >>> type(result)
 IPython.parallel.client.asyncresult.AsyncResult
@@ -384,45 +384,45 @@ IPython.parallel.client.asyncresult.AsyncResult
 >>> dview.block = True
 >>> dview.apply(lambda y: x+y, 19)
 ...
-\end{minted}
+[pyconcode]>
 
 ==== Partition and Collection data ====[containsverbatim]
 
 * Send using @scatter@
 
-\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+<[pyconcode]
 >>> dview4 = client[:4]
 >>> dview4.block = True
 >>> dview4.scatter('a','Hello World!')
 ['Hel', 'lo ', 'Wor', 'ld!']
-\end{minted}
+[pyconcode]>
 
 * Now operate on the data using @execute@
 
-\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+<[pyconcode]
 >>> dview4.execute('a = a.upper()', targets=[0, 1])
 >>> dview4['a']
 ['HEL', 'LO ', 'Wor', 'ld!']
-\end{minted}
+[pyconcode]>
 
 * Collect using @gather@
 
-\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+<[pyconcode]
 >>> "".join(dview4.gather('a'))
 'HELLO World!'
-\end{minted}
+[pyconcode]>
 
 ==== Warnings ====[containsverbatim]
 
 * Engines are not reset after IPython restart
 
-\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+<[pyconcode]
 >>> from IPython.parallel import Client
 >>> client = Client()
 >>> dview4 = client[:4]
 >>> dview4['a']
 ['HEL', 'LO ', 'Wor', 'ld!']
-\end{minted}
+[pyconcode]>
 
 * Errors propagate as usual
 
