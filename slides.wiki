@@ -283,20 +283,32 @@ See also: \href{http://en.wikipedia.org/wiki/Dining_philosophers_problem}{Dining
 
 ==== Embarrassingly Parallel - Multiprocessing ====[containsverbatim]
 
+* Imaging the following function that does work
+
+\pyfile{code/ex_smp_emb.py}
+
+==== The @Pool@ class and @map@ function ====[containsverbatim]
+
+* Python provides a builtin @map@ function
 * The @Pool@ class comes in handy for embarrassingly parallel problems
+* Provides a @map@ function across worker processes
 
 \begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
->>> from multiprocessing import Pool
->>> def f(x): return x*x
+>>> nums = range(10)
+>>> %timeit map(f, nums)
+1 loops, best of 3: 1.52 s per loop
 >>> pool1 = Pool(1)
->>> pool24 = Pool(24)
->>> nums = range(10000000)
 >>> %timeit pool1.map(f, nums)
-1 loops, best of 3: 8.18 s per loop
+1 loops, best of 3: 1.32 s per loop
+>>> pool6 = Pool(6)
+>>> %timeit pool6.map(f, nums)
+1 loops, best of 3: 327 ms per loop
+>>> pool24 = Pool(24)
 >>> %timeit pool24.map(f, nums)
-1 loops, best of 3: 4.05 s per loop
+10 loops, best of 3: 187 ms per loop
 \end{minted}
 
+* @import@ statements need to be in the function
 * If you need one with a progressbar: \href{https://github.com/esc/embparpbar}{embparpbar}
 
 
