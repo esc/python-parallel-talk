@@ -311,7 +311,151 @@ See also: \href{http://en.wikipedia.org/wiki/Dining_philosophers_problem}{Dining
 * @import@ statements need to be in the function
 * If you need one with a progressbar: \href{https://github.com/esc/embparpbar}{embparpbar}
 
+=== Easy Concurrency with IPython ===
 
+==== Outline ====
+
+\tableofcontents[currentsection, currentsubsection]
+
+==== Starting IPython engines ====[containsverbatim]
+
+* To launch a small (or large) cluster of IPython engines
+
+<[consolecode]
+$ ipcluster start -n 24
+2013-02-05 16:35:56,367.367 [IPClusterStart]
+    Using existing profile dir: u'/home/val/.ipython/profile_default'
+2013-02-05 16:35:56.372 [IPClusterStart]
+    Starting ipcluster with [daemon=False]
+2013-02-05 16:35:56.373 [IPClusterStart]
+    Creating pid file: /home/val/.ipython/profile_default/pid/ipcluster.pid
+2013-02-05 16:35:56.376 [IPClusterStart]
+    Starting Controller with LocalControllerLauncher
+2013-02-05 16:35:57.372 [IPClusterStart]
+    Starting 24 Engines with LocalEngineSetLauncher
+2013-02-05 16:36:29.888 [IPClusterStart]
+    Engines appear to have started successfully
+[consolecode]>
+
+==== Command them from IPython ====[containsverbatim]
+
+* Use the @Client@ class to interface with the engines
+
+\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+>>> from IPython.parallel import Client
+>>> client = Client()
+>>> len(client.ids)
+24
+\end{minted}
+
+* Easy example: using an embarrassingly parallel map
+* Obtain a @DirectView@ using slicing on the @client@
+
+\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+>>> dview = client[:]
+>>> type(dview)
+IPython.parallel.client.view.DirectView
+>>> %timeit dview.map_sync(f, range(10)) # using the f from before
+1 loops, best of 3: 187 ms per loop
+\end{minted}
+
+==== IPython engines have local namespaces ====[containsverbatim]
+
+* @DirectView@ object provides dictionary access to engine namespaces
+
+\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+>>> dview.execute('x=1')
+>>> dview['x']
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+>>> dview8 = client[8]
+>>> dview8.execute('x=23')
+>>> dview['x']
+[1, 1, 1, 1, 1, 1, 1, 1, 23, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+\end{minted}
+
+* Using @apply@ in asynchronous and synchronous mode
+
+\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+>>> result = dview.apply(lambda y: x+y, 19)
+>>> type(result)
+IPython.parallel.client.asyncresult.AsyncResult
+>>> result.get()[7:12]
+[20, 42, 20, 20, 20]
+>>> dview.block = True
+>>> dview.apply(lambda y: x+y, 19)
+...
+\end{minted}
+
+==== Partition and Collection data ====[containsverbatim]
+
+* Send using @scatter@
+
+\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+>>> dview4 = client[:4]
+>>> dview4.block = True
+>>> dview4.scatter('a','Hello World!')
+['Hel', 'lo ', 'Wor', 'ld!']
+\end{minted}
+
+* Now operate on the data using @execute@
+
+\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+>>> dview4.execute('a = a.upper()', targets=[0, 1])
+>>> dview4['a']
+['HEL', 'LO ', 'Wor', 'ld!']
+\end{minted}
+
+* Collect using @gather@
+
+\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+>>> "".join(dview4.gather('a'))
+'HELLO World!'
+\end{minted}
+
+==== Warnings ====[containsverbatim]
+
+* Engines are not reset after IPython restart
+
+\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+>>> from IPython.parallel import Client
+>>> client = Client()
+>>> dview4 = client[:4]
+>>> dview4['a']
+['HEL', 'LO ', 'Wor', 'ld!']
+\end{minted}
+
+* Errors propagate as usual
+
+<[nowiki]
+\begin{minted}[fontsize=\footnotesize]{pycon}
+>>> dview8['b']
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)<string> in <module>()
+/home/val/anaconda/lib/python2.7/site-packages/IPython/parallel/util.py in _pull(keys)
+    249     else:
+    250         if not user_ns.has_key(keys):
+--> 251             raise NameError("name '%s' is not defined"%keys)
+    252         return user_ns.get(keys)
+    253 
+NameError: name 'b' is not defined
+\end{minted}
+[nowiki]>
+
+==== Pros and Cons ====
+
+<[block]{_green_Pros_}
+* Interactive
+* Plays nicely with MPI
+* Re-conectible
+* Debugging output from engines
+* Can be run over other batch queueing systems
+** (e.g. Sun Grid Engine)
+[block]>
+
+<[block]{_red_Cons_}
+* Slow for large messages
+* No shared memory
+[block]>
 
 ==== slide 1 ====
 
