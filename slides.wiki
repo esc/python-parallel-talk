@@ -1,8 +1,276 @@
-== Section 1 ==
+== Introduction ==
 
 ==== Outline ====
 
-\tableofcontents[currentsection]
+\tableofcontents
+
+=== Why Concurrency? ===
+
+==== Outline ====
+
+\tableofcontents[currentsection, currentsubsection]
+
+==== What is concurrency ====
+
+* Parallel computing/processing
+
+* Several computations executing simultaneously
+
+* ... potentially interacting with each other
+
+==== The brain is a parallel machine ====
+
+* Asynchronous
+* Distributed memory
+* Simple messages
+* Agnostic to component failure
+* Connectivity:
+** dense local
+** sparse global
+* Works with long latencies
+
+=== Embarrassingly Parallel Programs ===
+
+==== Outline ====
+
+\tableofcontents[currentsection, currentsubsection]
+
+[frame]>
+
+\begin{frame}{Useful Applications for Concurrency}{Ray Tracing}
+\begin{figure}
+\includegraphics[width=\textwidth]{images/raytracing}
+\end{figure}
+Trace the path from an imaginary eye (camera) through each pixel in a screen
+and calculate the color of the object(s) visible through it.
+\end{frame}
+
+\begin{frame}{Useful Applications for Concurrency}{Ray Tracing}
+\begin{columns}
+\column{0.5\textwidth}
+\begin{figure}
+\includegraphics[width=\textwidth]{images/parallel_raytracing}
+\caption{Ray Tracing performed by one task.}
+\end{figure}
+\column{0.5\textwidth}
+\pause
+\begin{figure}
+\includegraphics[width=\textwidth]{images/parallel_raytracing2}
+\caption{Ray Tracing performed by two tasks.}
+\end{figure}
+\end{columns}
+\pause
+\vfill
+Ray Tracing is \textbf{embarrassingly parallel}:
+\begin{itemize}
+\item Little or no effort to separate the problem into parallel tasks
+\item No dependencies or communication between the tasks
+\end{itemize}
+\end{frame}
+
+=== Multicore Crisis ===
+
+==== Outline ====
+
+\tableofcontents[currentsection, currentsubsection]
+
+==== The free lunch is over ====
+
+\begin{quote}
+"Concurrency is the next major revolution in how we write 
+software [after OOP]."
+\end{quote}
+
+--2cm--
+
+Herb Sutter, ''The Free Lunch is Over: A Fundamental Turn Towards Concurrency in Software'' Dr.Dobb's Journal, 30(3) March 2005.
+
+==== Multicore Crisis ====
+
+* 1970-2005
+** CPUs became quicker and quicker every year
+** Moore’s Law: The number of transistors [...] doubles
+** approximately every two years.
+
+* _red_But!_
+** Physical limits:
+*** Miniaturization at atomic levels
+*** energy consumption
+*** heat produced by CPUs, etc.
+** Stagnation in CPU clock rates since 2005
+
+* Since 2005
+** Chip producers aimed for more cores instead of higher clock rates.
+** ==> Multicore crisis
+** FLOPS/S has been raplaced by FLOPS/W
+** (esp. in High Performance Computing(HPC))
+
+==== Multicore Crisis ====
+
+<[center]
+    <<<images/clockspeeds.pdf, scale=0.4>>>
+[center]>
+
+==== Don't Panic ====
+
+* Writing parallel programs is easy!
+* Small and simple APIs
+* Designing parallel algorithms can be _green_easy_ or _red_hard_
+* _green_Easy:_ embarassingly parallel
+* _red_Hard:_ to find the parallelism
+
+==== Don't Panic ====
+
+* Scientific parallel programs are easy!
+* _green_Parallelism:_ Number crunching over large datasets
+* _green_Prior-art:_ Many algorithms already exist
+* _green_Hardware:_ HPC is traditionally academic
+
+== Symetric Multiprocessing (SMP) ==
+
+=== SMP in Python ===
+
+==== Outline ====
+
+\tableofcontents[currentsection, currentsubsection]
+
+[frame]>
+
+<[nowiki]
+\begin{frame}{Two Kinds of Tasks: Threads and Processes}
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{images/processes_and_threads.pdf}
+\end{figure}
+\begin{itemize}
+    \item A process has \textbf{one or more} threads
+    \item Processes have their \textbf{own} memory (Variables, etc.)
+    \item Threads share the memory of the process they belong to
+    \item Threads are also called \textbf{lightweight} processes:
+    \begin{itemize}
+        \item They spawn faster than processes
+        \item Context switches (if necessary) are faster
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Communication between Tasks}{Shared Memory and Message Passing}
+Basically you have two paradigms:
+\begin{enumerate}
+    \item Shared Memory
+    \begin{itemize}
+        \item Taks A and B share some memory
+        \item Whenever a task modifies a variable in the shared memory, the
+        other task(s) see that change immediately
+    \end{itemize}
+    \item Message Passing
+    \begin{itemize}
+        \item Task A sends a message to Task B
+        \item Task B receives the message and does something with it
+    \end{itemize}
+\end{enumerate}
+The former paradigm is usually used with threads and the latter one with
+processes (more on that later).
+\end{frame}
+[nowiki]>
+
+==== Symmetric Multiprocessing (SMP) ====
+
+* Homogeneous Multi-core and/or cpu
+* Physically shared memory
+
+* e.g. 8-way 6-core Opteron = 48 cores
+
+* Most of you will have such a Laptop by now
+
+==== Python and the Global Interpreter Lock ====
+
+* Python suffers from the ''Gil Problem''
+* The interpreter has a global state storage
+* Not thread-safe!
+
+* Can have threads
+* ... but only one can run at a time
+* No real, concurrent threads in Python
+
+
+==== SMP in Python ====[containsverbatim]
+
+* Standard as of python 2.6
+
+\begin{minted}[fontsize=\footnotesize, xleftmargin=12pt]{pycon}
+>>> import multiprocessing
+\end{minted}
+
+* Like threads, but in separate processes
+* Avoids GIL but higher process creation cost
+* Package exists for 2.5
+
+==== Race ====[containsverbatim]
+
+* When unpredictable order of completion affects output
+** Hardware latency
+** Unpredictable algorithm run-time
+
+* Difficult to debug because problematic case maybe infrequent
+
+==== Race: the setup ====
+
+\pyfile{code/ex_smp_race.py}
+
+==== Race: in action ====[containsverbatim]
+
+\begin{minted}{console}
+$ python ex_smp_race.py
+10.0
+$ python ex_smp_race.py
+100.0
+$ python ex_smp_race.py
+10.0
+\end{minted}
+
+==== The apparent solution ====[containsverbatim]
+
+* Locks can be a solution to enforce atomicity:
+
+<[pycode]
+<[nowiki]
+l = Lock()
+l.acquire()
+# <code>
+l.release()
+[nowiki]>
+[pycode]>
+
+* However, Locks are source of deadlocks
+
+==== Deadlock: the setup ====[containsverbatim]
+
+\pyfile{code/ex_smp.py}
+
+==== Deadlock: in action ====[containsverbatim]
+
+<[pyconcode]
+<[nowiki]
+>>> %run ex_smp.py
+# p2 is still waiting for release (deadlock)
+>>> p2.is_alive()
+True
+>>> arg.value()
+10.0
+# resolve the deadlock, without killing processes
+>>> lock.release()
+>>> p2.is_alive()
+False
+>>> p2.join()
+>>> num.value
+20
+[nowiki]>
+[pyconcode]>
+
+See also: \href{http://en.wikipedia.org/wiki/Dining_philosophers_problem}{Dining Philosophers}
+
+
+
 
 ==== slide 1 ====
 
