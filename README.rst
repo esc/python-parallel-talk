@@ -16,6 +16,9 @@ The talk is made with:
 * `Minted <http://code.google.com/p/minted/>`_ (included in repository)
 * `ccBeamer <(http://blog.hartwork.org/?p=52>`_ (included in repository)
 
+Licensing
+=========
+
 Content
 -------
 
