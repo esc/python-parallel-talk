@@ -1,13 +1,13 @@
 import ctypes
-import numpy
 from multiprocessing import sharedctypes, Process
+import numpy
+from numpy import ctypeslib
 
-def f(a):
-   from numpy import ctypeslib
-   nd_a = ctypeslib.as_array(a)
-   nd_a[0] = numpy.sum(a)
+def f(cta):
+    from numpy import ctypeslib
+    npa = ctypeslib.as_array(cta._obj)
+    npa[0] = npa.sum()
 
-npa = numpy.linspace(1, 1e7)
-cta = sharedctypes.Array(ctypes.c_double, npa)
-p = Process(target=f, args=(cta,))
-
+cta = sharedctypes.Array(ctypes.c_double, numpy.arange(1e6))
+npa = ctypeslib.as_array(cta._obj)
+p1 = Process(target=f, args=(cta,))

@@ -269,6 +269,27 @@ False
 
 See also: \href{http://en.wikipedia.org/wiki/Dining_philosophers_problem}{Dining Philosophers}
 
+==== Shared Memory: Numpy and Multiprocessing ====[containsverbatim]
+
+\pyfile{code/ex_smp_numpy.py}
+
+* @cta@ is a synchronized shared memory buffer
+* @npa@ is a numpy array that shares memory with @cta@
+
+==== Shared Memory: Numpy and Multiprocessing ====[containsverbatim]
+
+<[pyconcode]
+>>> %run ex_smp_numpy.py
+>>> npa
+array([  0.00000000e+00,   1.00000000e+00,   2.00000000e+00, ...,
+         9.99997000e+05,   9.99998000e+05,   9.99999000e+05])
+>>> p1.start(); p1.join()
+In [6]: npa
+array([  4.99999500e+11,   1.00000000e+00,   2.00000000e+00, ...,
+         9.99997000e+05,   9.99998000e+05,   9.99999000e+05])
+[pyconcode]>
+
+
 ==== Embarrassingly Parallel - Multiprocessing ====[containsverbatim]
 
 * Imagine the following function that does work
