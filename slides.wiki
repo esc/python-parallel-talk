@@ -457,6 +457,183 @@ NameError: name 'b' is not defined
 * No shared memory
 [block]>
 
+==  mpi4py ==
+
+==== Outline ====
+
+\tableofcontents[currentsection]
+
+==== Scalable Message Passing Concurrency ====[containsverbatim]
+
+* MPI - the Message Passing Interface
+* Multi-process execution facilities
+
+<[consolecode]
+$ mpiexec -n 16 python helloworld.py
+[consolecode]>
+
+* API for inter-process message exchanges
+** eg. Basic P2P: Send (emitter), Recv (consumer)
+* Very common on large HPC installations
+
+==== What is MPI for Python? (@mpi4py@ ====
+
+* A wrapper for widely used MPI (MPICH2, OpenMPI, LAM/MPI)
+
+* MPI supported by wide range of vendors, hardware, languages
+
+* API based on the standard MPI-2 C++ bindings.
+
+* Almost all MPI calls are supported.
+** targeted to MPI-2 implementations.
+** also works with MPI-1 implementations.
+
+==== Basic stuff ====[containsverbatim]
+
+<[pycode]
+from mpi4py import MPI
+comm = MPI.COMM_WORLD
+[pycode]>
+
+
+* Communicator = @comm@
+** Manages processes and communication between them
+
+* @MPI.COMM\_WORLD@
+** all processes defined at execution time
+
+* @Comm.size@ -- total number of available processes
+* @Comm.rank@ -- ID of the current process
+
+==== Basic stuff ====[containsverbatim]
+
+\pyfile{code/ex_mpi.py}
+
+<[consolecode]
+$ mpiexec -n 4 python test.py
+Hello from teik, 1 of 4
+Hello from teik, 3 of 4
+Hello from teik, 2 of 4
+Hello from teik, 0 of 4
+[consolecode]>
+
+* Process needs to check which @rank@ it is
+
+==== What can this look like in practice ====
+
+<[center]
+    <<<images/bgp_mpi4py.png, width=\textwidth>>>
+[center]>
+
+==== Point-to-Point (P2P): Python objects ====
+
+\pyfile{code/ex_mpi_p2p.py}
+
+* The tag information allows selectivity of messages at the receiving end.
+
+==== P2P: (NumPy) array data ====
+
+<[nowiki]
+\pyfile{code/ex_mpi_p2p_numpy.py}
+[nowiki]>
+
+* Array data buffer notation: @[<BUFFER>, MPI.<DATATYPE>]@
+* MPI will write into the Numpy array
+
+==== Collective Messages ====
+
+Involve the whole @COMM@
+
+* '''Scatter'''
+** Spread a sequence over processes
+* '''Gather'''
+** Collect a sequence scattered over processes
+* '''Broadcast'''
+** Send a message to all processes
+* '''Barrier'''
+** Block till all processes arrive
+
+==== Scatter and Gather ====
+
+<[nowiki]
+\inputminted[lastline=18, fontsize=\footnotesize, xleftmargin=12pt]{py}{code/ex_mpi_scatter_gather.py}
+[nowiki]>
+
+==== Scatter and Gather ====
+
+<[nowiki]
+\inputminted[firstline=19, fontsize=\footnotesize, xleftmargin=12pt]{py}{code/ex_mpi_scatter_gather.py}
+[nowiki]>
+
+==== What is happening here ====
+
+* Imagine @comm.size == 2@
+* @len(dest)@ is @5@ everywhere
+* @msg@ is @array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])@
+* @dest@ on @0@ becomes @array([0, 1, 2, 3, 4])@
+* @dest@ on @1@ becomes @array([5, 6, 7, 8, 9])@
+
+* <2-5>What is the @len@ of @ans@?
+* <3-5> @2@ is correct
+* <4-5>What is the final value of @ans@?
+* <5-5> @[10, 35]@ is correct
+
+==== The @import@ problem ====
+
+* Importing Python module from each MPI process may cause problems on big installations
+* \href{https://github.com/langton/MPI\_Import}{MPI\_import} provides specialised import statements that use MPI under the hood e.g. @mpi\_import@
+
+<[nowiki]
+\pyfile{code/ex_mpi_import.py}
+[nowiki]>
+
+==== Implementation ====
+
+* Implemented with \href{http://www.cython.org}{Cython}
+
+* Code base far easier to write, maintain, and extend.
+
+* Faster than other solutions (mixed Python and C codes).
+
+* A '''pythonic''' API that runs at C speed !
+
+
+==== Portability ====
+
+* Tested on all major platforms (Linux, Mac OS X, Windows).
+
+* Works with the open-source MPI's (MPICH2, Open MPI, MPICH1, LAM).
+
+* Should work with vendor-provided MPI's (HP, IBM, SGI).
+
+* Works on Python 2.3 to 3.0 (Cython is just great!).
+
+
+==== Interoperability ====
+
+* Good support for wrapping other MPI-based codes.
+* You can use Cython (@cimport@ statement).
+* You can use boost.
+* You can use SWIG (''typemaps'' provided).
+* You can use F2Py (``py2f()``/``f2py()`` methods).
+* You can use hand-written C (C-API provided).
+
+* @mpi4py@ will allow you to use virtually '''any''' MPI based C/C++/Fortran
+code from Python.
+
+==== Features Summary ====
+
+* Classical MPI-1 Point-to-Point.
+** blocking (@send@/@recv@)
+** non-blocking (@isend@/@irecv@, @test@/@wait@).
+* Classical MPI-1 and Extended MPI-2 Collectives.
+* Communication of general Python objects (pickle).
+** very convenient, as general as pickle can be.
+** can be slow for large data (CPU and memory consuming).
+* Communication of array data (Python's buffer interface).
+** MPI datatypes have to be explicitly specified.
+** Very fast, almost C speed (for messages above 5-10 kB).
+
 ==== slide 1 ====
 
 * bullet 1
