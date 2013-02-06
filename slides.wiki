@@ -128,8 +128,6 @@ Herb Sutter, ''The Free Lunch is Over: A Fundamental Turn Towards Concurrency in
 
 == Symetric Multiprocessing (SMP) ==
 
-=== SMP in Python ===
-
 ==== Outline ====
 
 \tableofcontents[currentsection, currentsubsection]
@@ -195,7 +193,7 @@ processes (more on that later).
 
 ==== SMP in Python ====[containsverbatim]
 
-* Standard as of python 2.6
+* Standard as of Python 2.6
 
 <[pyconcode]
 >>> import multiprocessing
@@ -205,11 +203,6 @@ processes (more on that later).
 * Avoids GIL but higher process creation cost
 * Package exists for 2.5
 
-=== Race Conditions ===
-
-==== Outline ====
-
-\tableofcontents[currentsection, currentsubsection]
 
 ==== Race ====[containsverbatim]
 
@@ -249,11 +242,6 @@ l.release()
 
 * However, Locks are source of deadlocks
 
-=== Deadlocks ===
-
-==== Outline ====
-
-\tableofcontents[currentsection, currentsubsection]
 
 ==== Deadlock: the setup ====[containsverbatim]
 
@@ -311,7 +299,7 @@ See also: \href{http://en.wikipedia.org/wiki/Dining_philosophers_problem}{Dining
 * @import@ statements need to be in the function
 * If you need one with a progressbar: \href{https://github.com/esc/embparpbar}{embparpbar}
 
-=== Easy Concurrency with IPython ===
+== Concurrency with IPython ==
 
 ==== Outline ====
 
@@ -457,7 +445,7 @@ NameError: name 'b' is not defined
 * No shared memory
 [block]>
 
-==  mpi4py ==
+== MPI for Python with @mpi4py@ ==
 
 ==== Outline ====
 
@@ -633,126 +621,3 @@ code from Python.
 * Communication of array data (Python's buffer interface).
 ** MPI datatypes have to be explicitly specified.
 ** Very fast, almost C speed (for messages above 5-10 kB).
-
-==== slide 1 ====
-
-* bullet 1
-* bullet 2
-* bullet 3
-
-==  Section 2 ==
-
-==== Outline ====
-
-\tableofcontents[currentsection]
-
-=== Subsection 1 ===
-
-==== Outline ====
-
-\tableofcontents[currentsection,currentsubsection]
-
-==== Image Slide ====
-
-<[center]
-    <<<images/python-logo.png, scale=0.30>>>
-[center]>
-
-==== slide 2 ====
-
-* bullet 1
-* bullet 2
-* bullet 3
-
-=== Subsection 2 ===
-
-==== Outline ====
-
-\tableofcontents[currentsection,currentsubsection]
-
-==== Block ====
-
-<[block]{Block Title}
-Block contents
-[block]>
-
-==== Special Symbols ====
-
-* Tilde: \~{}
-* Tilde: \textasciitilde{}
-* Caret: \^{}
-* Hash: \#
-* Braces: \{\}
-* Dollar: \$
-* Double en: -{}-
-* At in Typewriter: {\tt stash@\{0\} }
-* Exclamation mark in alert: \alert{Attention!}
-
-or use: nowiki
-
-==== Correct Escapes  ====
-
-This only works with my patched version of wiki2beamer.
-
-* @HEAD \@ HEAD@
-* Attention\! Attention\!
-
-==== Verbatim ====[fragile]
-
-\begin{verbatim}
-
-wiki2beamer slides.wiki > slides.wiki.tex
-pdflatex slides.tex
-
-\end{verbatim}
-
-[frame]>
-
-==== Verbatim2 ====[containsverbatim]
-
-<[verbatim]
-
-wiki2beamer slides.wiki > slides.wiki.tex
-pdflatex slides.tex
-
-[verbatim]>
-
-==== Verbatim Block ====[containsverbatim]
-
-<[block]{Verbatim Block}
-<[verbatim]
-
-wiki2beamer slides.wiki > slides.wiki.tex
-pdflatex slides.tex
-
-[verbatim]>
-[block]>
-
-==== Code ====[containsverbatim]
-
-\begin{pycode}
-def python_func(arg):
-    print 'arg was: ', arg
-
-python_func('Hello World!")
-\end{pycode}
-
-==== Code from file ====
-
-\pyfile{code/code.py}
-
-==== Example ====
-
-<[example]
-    This is an example
-[example]>
-
-==== Conclusion ====
-
-* Open source tools used to make this presentation:
-** \href{http://wiki2beamer.sourceforge.net/}{Wiki2beamer}
-** \href{http://latex-beamer.sourceforge.net/}{\LaTeX beamer}
-** \href{http://projects.gnome.org/dia/}{Dia}
-** \href{http://pygments.org/}{Pygments}
-** \href{http://code.google.com/p/minted/}{Minted}
-** \href{https://bitbucket.org/john2x/solarized-pygment}{Solarized theme for pygments}
