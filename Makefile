@@ -1,5 +1,5 @@
 base = slides
-slidefilename = NAME
+slidefilename = parallel-talk
 
 .PHONY: git-sha
 
