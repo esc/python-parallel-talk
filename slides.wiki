@@ -271,7 +271,7 @@ See also: \href{http://en.wikipedia.org/wiki/Dining_philosophers_problem}{Dining
 
 ==== Embarrassingly Parallel - Multiprocessing ====[containsverbatim]
 
-* Imaging the following function that does work
+* Imagine the following function that does work
 
 \pyfile{code/ex_smp_emb.py}
 
