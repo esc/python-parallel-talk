@@ -485,7 +485,7 @@ $ mpiexec -n 16 python helloworld.py
 ** eg. Basic P2P: Send (emitter), Recv (consumer)
 * Very common on large HPC installations
 
-==== What is MPI for Python? (@mpi4py@ ====
+==== What is MPI for Python? (@mpi4py@) ====
 
 * A wrapper for widely used MPI (MPICH2, OpenMPI, LAM/MPI)
 
@@ -547,6 +547,7 @@ Hello from teik, 0 of 4
 [nowiki]>
 
 * Array data buffer notation: @[<BUFFER>, MPI.<DATATYPE>]@
+* Can also inferr the correct datatype from the numpy array
 * MPI will write into the Numpy array
 
 ==== Collective Messages ====
