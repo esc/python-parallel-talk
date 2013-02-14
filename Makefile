@@ -1,5 +1,5 @@
 base = slides
-slidefilename = parallel-talk
+slidefilename = haenel-parallel-talk
 
 .PHONY: git-sha
 
