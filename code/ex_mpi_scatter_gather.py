@@ -4,7 +4,7 @@ import numpy
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 
-N = 10
+N = 4
 # rank 0 should send the message
 if comm.rank == 0:
     msg = numpy.arange(N, dtype=int)

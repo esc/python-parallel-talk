@@ -559,7 +559,7 @@ comm = MPI.COMM_WORLD
 \pyfile{code/ex_mpi.py}
 
 <[consolecode]
-$ mpiexec -n 4 python test.py
+$ mpiexec -n 4 python ex_mpi.py
 Hello from teik, 1 of 4
 Hello from teik, 3 of 4
 Hello from teik, 2 of 4
