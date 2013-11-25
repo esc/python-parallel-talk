@@ -29,6 +29,8 @@
 ** sparse global
 * Works with long latencies
 
+* <2-2>... and works with messy data (big data)
+
 === Embarrassingly Parallel Programs ===
 
 ==== Outline ====
