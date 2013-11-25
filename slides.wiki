@@ -331,23 +331,29 @@ array([  4.99999500e+11,   1.00000000e+00,   2.00000000e+00, ...,
 * The @Pool@ class comes in handy for embarrassingly parallel problems
 * Provides a @map@ function across worker processes
 
-<[pyconcode]
->>> nums = range(10)
->>> %timeit map(f, nums)
-1 loops, best of 3: 1.52 s per loop
->>> pool1 = Pool(1)
->>> %timeit pool1.map(f, nums)
-1 loops, best of 3: 1.32 s per loop
->>> pool6 = Pool(6)
->>> %timeit pool6.map(f, nums)
-1 loops, best of 3: 327 ms per loop
->>> pool24 = Pool(24)
->>> %timeit pool24.map(f, nums)
-10 loops, best of 3: 187 ms per loop
-[pyconcode]>
-
 * @import@ statements need to be in the function
 * If you need one with a progressbar: \href{https://github.com/esc/embparpbar}{embparpbar}
+
+==== The @Pool@ class and @map@ function ====[containsverbatim]
+
+<[pyconcode]
+
+>>> nums = range(10)
+>>> %timeit map(f, nums)
+1 loops, best of 3: 1.37 s per loop
+>>> pool1 = Pool(1)
+>>> %timeit pool1.map(f, nums)
+1 loops, best of 3: 1.27 s per loop
+>>> pool6 = Pool(6)
+>>> %timeit pool6.map(f, nums)
+1 loops, best of 3: 281 ms per loop
+>>> pool10 = Pool(10)
+>>> %timeit pool10.map(f, nums)
+10 loops, best of 3: 194 ms per loop
+>>> pool16 = Pool(16)
+>>> %timeit pool16.map(f, nums)
+10 loops, best of 3: 186 ms per loop
+[pyconcode]>
 
 == Concurrency with IPython ==
 
