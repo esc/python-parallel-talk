@@ -392,6 +392,8 @@ $ ipcluster start -n 24
 24
 [pyconcode]>
 
+==== Command them from IPython ====[containsverbatim]
+
 * Easy example: using an embarrassingly parallel map
 * Obtain a @DirectView@ using slicing on the @client@
 
@@ -416,6 +418,9 @@ IPython.parallel.client.view.DirectView
 >>> dview['x']
 [1, 1, 1, 1, 1, 1, 1, 1, 23, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 [pyconcode]>
+
+
+==== IPython engines have local namespaces ====[containsverbatim]
 
 * Using @apply@ in asynchronous and synchronous mode
 
