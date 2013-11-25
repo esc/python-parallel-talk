@@ -182,7 +182,7 @@ processes (more on that later).
 
 * Most of you will have such a Laptop by now
 
-==== Python and the Global Interpreter Lock ====
+==== Python and the Global Interpreter Lock (GIL) ====
 
 * Python suffers from the ''Gil Problem''
 * The interpreter has a global state storage
