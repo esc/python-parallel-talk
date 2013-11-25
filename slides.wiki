@@ -182,15 +182,17 @@ processes (more on that later).
 
 * Most of you will have such a Laptop by now
 
-==== Python and the Global Interpreter Lock (GIL) ====
+==== CPython and the Global Interpreter Lock (GIL) ====
 
-* Python suffers from the ''Gil Problem''
+* CPython suffers from the ''Gil Problem''
 * The interpreter has a global state storage
 * Not thread-safe!
 
 * Can have threads
 * ... but only one can run at a time
-* No real, concurrent threads in Python
+* No real, concurrent threads in CPython
+
+* <2-2> JYthon and IronPython do not suffer from this limitation
 
 
 ==== SMP in Python ====[containsverbatim]
