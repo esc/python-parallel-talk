@@ -113,6 +113,31 @@ Herb Sutter, ''The Free Lunch is Over: A Fundamental Turn Towards Concurrency in
     <<<images/clockspeeds.pdf, scale=0.4>>>
 [center]>
 
+==== Limitations: Amdahls Law====
+
+\begin{quote}
+The speedup of a program using multiple processors in parallel computing is
+limited by the time needed for the sequential fraction of the program.
+\end{quote}
+
+
+==== Limitations: Amdahls Law====
+
+<[center]
+    <<<images/AmdahlsLaw.pdf, scale=0.3>>>
+[center]>
+
+\begin{quote}
+\tiny{
+if a program needs 20 hours using a single processor core, and a particular
+portion of the program which takes one hour to execute cannot be parallelized,
+while the remaining 19 hours ($95$) of execution time can be parallelized, then
+regardless of how many processors are devoted to a parallelized execution of
+this program, the minimum execution time cannot be less than that critical one
+hour. Hence the speedup is limited up to 20×.}
+\end{quote}
+
+
 ==== Don't Panic ====
 
 * Writing parallel programs is easy!
