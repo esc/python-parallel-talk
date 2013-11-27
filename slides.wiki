@@ -612,7 +612,13 @@ Involve the whole @COMM@
 ==== Scatter and Gather ====
 
 <[nowiki]
-\inputminted[firstline=19, fontsize=\footnotesize, xleftmargin=12pt]{py}{code/ex_mpi_scatter_gather.py}
+\inputminted[firstline=19, lastline=29, fontsize=\footnotesize, xleftmargin=12pt]{py}{code/ex_mpi_scatter_gather.py}
+[nowiki]>
+
+==== Scatter and Gather ====
+
+<[nowiki]
+\inputminted[firstline=31, fontsize=\footnotesize, xleftmargin=12pt]{py}{code/ex_mpi_scatter_gather.py}
 [nowiki]>
 
 ==== What is happening here ====
@@ -627,6 +633,16 @@ Involve the whole @COMM@
 * <3-5> @2@ is correct
 * <4-5>What is the final value of @ans@?
 * <5-5> @[10, 35]@ is correct
+
+==== What is happening here ====[containsverbatim]
+
+<[consolecode]
+<[nowiki]
+$ mpiexec -n 2 python ex_mpi_scatter_gather.py
+[nowiki]>
+Answer from rank 1: [139713299173080 139713299173080]
+Answer from rank 0: [10 35]
+[consolecode]>
 
 ==== The @import@ problem ====
 
