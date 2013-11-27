@@ -104,7 +104,7 @@ Herb Sutter, ''The Free Lunch is Over: A Fundamental Turn Towards Concurrency in
 * Since 2005
 ** Chip producers aimed for more cores instead of higher clock rates.
 ** ==> Multicore crisis
-** FLOPS/S has been raplaced by FLOPS/W
+** FLOPS has been raplaced by FLOPW
 ** (esp. in High Performance Computing(HPC))
 
 ==== Multicore Crisis ====
@@ -205,7 +205,7 @@ processes (more on that later).
 
 * e.g. 8-way 6-core Opteron = 48 cores
 
-* Most of you will have such a Laptop by now
+* Most of you have a multicore CPU in your laptop
 
 ==== CPython and the Global Interpreter Lock (GIL) ====
 
@@ -217,7 +217,7 @@ processes (more on that later).
 * ... but only one can run at a time
 * No real, concurrent threads in CPython
 
-* <2-2> JYthon and IronPython do not suffer from this limitation
+* <2-2> Jython and IronPython do not suffer from this limitation
 
 
 ==== SMP in Python ====[containsverbatim]
