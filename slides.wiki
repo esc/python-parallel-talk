@@ -104,7 +104,7 @@ Herb Sutter, ''The Free Lunch is Over: A Fundamental Turn Towards Concurrency in
 * Since 2005
 ** Chip producers aimed for more cores instead of higher clock rates.
 ** ==> Multicore crisis
-** FLOPS has been raplaced by FLOPW
+** FLOPS has been replaced by FLOPW
 ** (esp. in High Performance Computing(HPC))
 
 ==== Multicore Crisis ====
